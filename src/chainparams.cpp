@@ -187,7 +187,7 @@ public:
 
         nPoolMaxTransactions = 3;
         strSporkKey = "049825D3D5FC2AF3AAEB0E7AEF080FD52B0ABDD68B8519A32A917BB764409A971BD33EC3FADA75E43EDED6F14D8F7D5A9A2B94F1BB08045D2499EE23732937A902";
-        strObfuscationPoolDummyAddress = "X87q2gC9j6nNrnzCsg4aY6bHMLsT9nUhEw";
+        strObfuscationPoolDummyAddress = "STCkDBUJvFTFQobR3v3JqViL3NbapcmW3i";
 
     }
 
