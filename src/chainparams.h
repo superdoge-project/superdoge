@@ -53,10 +53,10 @@ public:
     const MessageStartChars& MessageStart() const { return pchMessageStart; }
     const std::vector<unsigned char>& AlertKey() const { return vAlertPubKey; }
 
-    //const std::vector<unsigned char>& xDNADevKey() const { return vSUPERDOGEDevKey; }
-    //const std::vector<unsigned char>& xFundKey() const { return vFundKey; }
-    //int GetDevFee() const { return nDevFee; }
-    //int GetFundFee() const { return nFundFee; }
+    const std::vector<unsigned char>& xDNADevKey() const { return vXDNADevKey; }
+    const std::vector<unsigned char>& xDNAFundKey() const { return vXDNAFundKey; }
+    int GetDevFee() const { return nDevFee; }
+    int GetFundFee() const { return nFundFee; }
 
     int GetDefaultPort() const { return nDefaultPort; }
     const uint256& ProofOfWorkLimit() const { return bnProofOfWorkLimit; }
@@ -88,7 +88,7 @@ public:
     int COINBASE_MATURITY() const { return nMaturity; }
     CAmount MaxMoneyOut() const { return nMaxMoneyOut; }
     /** The masternode count that we will allow the see-saw reward payments to be off by */
-    //int MasternodeCountDrift() const { return nMasternodeCountDrift; }
+    int MasternodeCountDrift() const { return nMasternodeCountDrift; }
     /** Make miner stop after a block is found. In RPC, don't return until nGenProcLimit blocks are generated */
     bool MineBlocksOnDemand() const { return fMineBlocksOnDemand; }
     /** In the future use NetworkIDString() for RPC fields */
@@ -110,10 +110,10 @@ public:
     int ModifierUpgradeBlock()       const { return nModifierUpdateBlock; }
     int LAST_POW_BLOCK()             const { return nLastPOWBlock; }
     int StartMNPaymentsBlock()       const { return nStartMasternodePaymentsBlock; }
-    //int F3Activation()               const { return nF3ActivationHeight; }
+    int F3Activation()               const { return nF3ActivationHeight; }
 
-    //uint32_t HEXHashActivationTime() const { return nHEXHashTimestamp; }
-    //uint32_t F2ActivationTime()      const { return nF2Timestamp; }
+    uint32_t HEXHashActivationTime() const { return nHEXHashTimestamp; }
+    uint32_t F2ActivationTime()      const { return nF2Timestamp; }
 
     const SubsidySwitchPoints& GetSubsidySwitchPoints(uint32_t nTime, int nHeight) const;
 
@@ -124,9 +124,10 @@ protected:
     MessageStartChars pchMessageStart;
     //! Raw pub key bytes for the broadcast alert signing key.
     std::vector<unsigned char> vAlertPubKey;
-    //std::vector<unsigned char> vFundKey;
-    //int nDevFee;
-    //int nFundFee;
+    std::vector<unsigned char> vXDNADevKey;
+    std::vector<unsigned char> vXDNAFundKey;
+    int nDevFee;
+    int nFundFee;
     int nDefaultPort;
     uint256 bnProofOfWorkLimit;
     uint256 bnStartWork;
@@ -164,7 +165,7 @@ protected:
     std::string strObfuscationPoolDummyAddress;
     int64_t nStartMasternodePayments;
 
-    //uint32_t            nHEXHashTimestamp;
+    uint32_t            nHEXHashTimestamp;
     SubsidySwitchPoints subsidySwitchPoints_HEXHash;
 
     uint32_t                                nF2Timestamp;

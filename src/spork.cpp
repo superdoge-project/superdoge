@@ -113,7 +113,7 @@ void ProcessSpork(CNode* pfrom, std::string& strCommand, CDataStream& vRecv)
 int64_t GetSporkValue(int nSporkID)
 {
     int64_t r = -1;
-    /*
+
     if (mapSporksActive.count(nSporkID)) {
         r = mapSporksActive[nSporkID].nValue;
     } else {
@@ -129,7 +129,6 @@ int64_t GetSporkValue(int nSporkID)
 
         if (r == -1) LogPrintf("GetSpork::Unknown Spork %d\n", nSporkID);
     }
-    */
 
     return r;
 }
@@ -255,15 +254,15 @@ bool CSporkManager::SetPrivKey(std::string strPrivKey)
 
 int CSporkManager::GetSporkIDByName(std::string strName)
 {
-    //if (strName == "SPORK_1_SWIFTTX") return SPORK_1_SWIFTTX;
-    //if (strName == "SPORK_2_SWIFTTX_BLOCK_FILTERING") return SPORK_2_SWIFTTX_BLOCK_FILTERING;
-    //if (strName == "SPORK_3_MAX_VALUE") return SPORK_3_MAX_VALUE;
-    //if (strName == "SPORK_4_MASTERNODE_PAYMENT_ENFORCEMENT") return SPORK_4_MASTERNODE_PAYMENT_ENFORCEMENT;
-    //if (strName == "SPORK_5_RECONSIDER_BLOCKS") return SPORK_5_RECONSIDER_BLOCKS;
-    //if (strName == "SPORK_6_MN_WINNER_MINIMUM_AGE") return SPORK_6_MN_WINNER_MINIMUM_AGE;
-    //if (strName == "SPORK_7_MN_REBROADCAST_ENFORCEMENT") return SPORK_7_MN_REBROADCAST_ENFORCEMENT;
-    //if (strName == "SPORK_8_NEW_PROTOCOL_ENFORCEMENT") return SPORK_8_NEW_PROTOCOL_ENFORCEMENT;
-    //if (strName == "SPORK_9_NEW_PROTOCOL_ENFORCEMENT_2") return SPORK_9_NEW_PROTOCOL_ENFORCEMENT_2;
+    if (strName == "SPORK_1_SWIFTTX") return SPORK_1_SWIFTTX;
+    if (strName == "SPORK_2_SWIFTTX_BLOCK_FILTERING") return SPORK_2_SWIFTTX_BLOCK_FILTERING;
+    if (strName == "SPORK_3_MAX_VALUE") return SPORK_3_MAX_VALUE;
+    if (strName == "SPORK_4_MASTERNODE_PAYMENT_ENFORCEMENT") return SPORK_4_MASTERNODE_PAYMENT_ENFORCEMENT;
+    if (strName == "SPORK_5_RECONSIDER_BLOCKS") return SPORK_5_RECONSIDER_BLOCKS;
+    if (strName == "SPORK_6_MN_WINNER_MINIMUM_AGE") return SPORK_6_MN_WINNER_MINIMUM_AGE;
+    if (strName == "SPORK_7_MN_REBROADCAST_ENFORCEMENT") return SPORK_7_MN_REBROADCAST_ENFORCEMENT;
+    if (strName == "SPORK_8_NEW_PROTOCOL_ENFORCEMENT") return SPORK_8_NEW_PROTOCOL_ENFORCEMENT;
+    if (strName == "SPORK_9_NEW_PROTOCOL_ENFORCEMENT_2") return SPORK_9_NEW_PROTOCOL_ENFORCEMENT_2;
 
 
     return -1;
@@ -271,15 +270,15 @@ int CSporkManager::GetSporkIDByName(std::string strName)
 
 std::string CSporkManager::GetSporkNameByID(int id)
 {
-    //if (id == SPORK_1_SWIFTTX) return "SPORK_1_SWIFTTX";
-    //if (id == SPORK_2_SWIFTTX_BLOCK_FILTERING) return "SPORK_2_SWIFTTX_BLOCK_FILTERING";
-    //if (id == SPORK_3_MAX_VALUE) return "SPORK_3_MAX_VALUE";
-    //if (id == SPORK_4_MASTERNODE_PAYMENT_ENFORCEMENT) return "SPORK_4_MASTERNODE_PAYMENT_ENFORCEMENT";
-    //if (id == SPORK_5_RECONSIDER_BLOCKS) return "SPORK_5_RECONSIDER_BLOCKS";
-    //if (id == SPORK_6_MN_WINNER_MINIMUM_AGE) return "SPORK_6_MN_WINNER_MINIMUM_AGE";
-    //if (id == SPORK_7_MN_REBROADCAST_ENFORCEMENT) return "SPORK_7_MN_REBROADCAST_ENFORCEMENT";
-    //if (id == SPORK_8_NEW_PROTOCOL_ENFORCEMENT) return "SPORK_8_NEW_PROTOCOL_ENFORCEMENT";
-    //if (id == SPORK_9_NEW_PROTOCOL_ENFORCEMENT_2) return "SPORK_9_NEW_PROTOCOL_ENFORCEMENT_2";
+    if (id == SPORK_1_SWIFTTX) return "SPORK_1_SWIFTTX";
+    if (id == SPORK_2_SWIFTTX_BLOCK_FILTERING) return "SPORK_2_SWIFTTX_BLOCK_FILTERING";
+    if (id == SPORK_3_MAX_VALUE) return "SPORK_3_MAX_VALUE";
+    if (id == SPORK_4_MASTERNODE_PAYMENT_ENFORCEMENT) return "SPORK_4_MASTERNODE_PAYMENT_ENFORCEMENT";
+    if (id == SPORK_5_RECONSIDER_BLOCKS) return "SPORK_5_RECONSIDER_BLOCKS";
+    if (id == SPORK_6_MN_WINNER_MINIMUM_AGE) return "SPORK_6_MN_WINNER_MINIMUM_AGE";
+    if (id == SPORK_7_MN_REBROADCAST_ENFORCEMENT) return "SPORK_7_MN_REBROADCAST_ENFORCEMENT";
+    if (id == SPORK_8_NEW_PROTOCOL_ENFORCEMENT) return "SPORK_8_NEW_PROTOCOL_ENFORCEMENT";
+    if (id == SPORK_9_NEW_PROTOCOL_ENFORCEMENT_2) return "SPORK_9_NEW_PROTOCOL_ENFORCEMENT_2";
 
     return "Unknown";
 }

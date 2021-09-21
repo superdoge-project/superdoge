@@ -315,10 +315,10 @@ void OverviewPage::updateMasternodeInfo()
 
     ui->graphMN1->setMaximum(totalmn);
     ui->graphMN2->setMaximum(totalmn);
-    //ui->graphMN3->setMaximum(totalmn);
+    ui->graphMN3->setMaximum(totalmn);
     ui->graphMN1->setValue(mn1);
     ui->graphMN2->setValue(mn2);
-    //ui->graphMN3->setValue(mn3);
+    ui->graphMN3->setValue(mn3);
 
     if(timerinfo_mn->interval() == 1000)
            timerinfo_mn->setInterval(180000);

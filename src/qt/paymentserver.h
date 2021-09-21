@@ -8,11 +8,6 @@
 // This class handles payment requests from clicking on
 // superdoge: URIs
 //
-// This is somewhat tricky, because we have to deal with
-// the situation where the user clicks on a link during
-// startup/initialization, when the splash-screen is up
-// but the main window (and the Send Coins tab) is not.
-//
 // So, the strategy is:
 //
 // Create the server, and register the event handler,

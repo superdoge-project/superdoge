@@ -33,18 +33,15 @@ ReceiveCoinsDialog::ReceiveCoinsDialog(QWidget* parent) : QDialog(parent),
     ui->showRequestButton->setIcon(QIcon());
     ui->removeRequestButton->setIcon(QIcon());
 #endif
-
     // context menu actions
     QAction* copyLabelAction = new QAction(tr("Copy label"), this);
     QAction* copyMessageAction = new QAction(tr("Copy message"), this);
     QAction* copyAmountAction = new QAction(tr("Copy amount"), this);
-
     // context menu
     contextMenu = new QMenu();
     contextMenu->addAction(copyLabelAction);
     contextMenu->addAction(copyMessageAction);
     contextMenu->addAction(copyAmountAction);
-
     // context menu signals
     connect(ui->recentRequestsView, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showMenu(QPoint)));
     connect(copyLabelAction, SIGNAL(triggered()), this, SLOT(copyLabel()));

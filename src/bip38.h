@@ -11,15 +11,6 @@
 #include <string>
 
 
-/** 39 bytes - 78 characters
- * 1) Prefix - 2 bytes - 4 chars - strKey[0..3]
- * 2) Flagbyte - 1 byte - 2 chars - strKey[4..5]
- * 3) addresshash - 4 bytes - 8 chars - strKey[6..13]
- * 4) Owner Entropy - 8 bytes - 16 chars - strKey[14..29]
- * 5) Encrypted Part 1 - 8 bytes - 16 chars - strKey[30..45]
- * 6) Encrypted Part 2 - 16 bytes - 32 chars - strKey[46..77]
- */
-
 void DecryptAES(uint256 encryptedIn, uint256 decryptionKey, uint256& output);
 
 void ComputePreFactor(std::string strPassphrase, std::string strSalt, uint256& prefactor);

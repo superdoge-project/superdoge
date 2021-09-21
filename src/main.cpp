@@ -90,7 +90,7 @@ int64_t nReserveBalance = 0;
  * We are ~100 times smaller then bitcoin now (2015-06-23), set minRelayTxFee only 10 times higher
  * so it's still 10 times lower comparing to bitcoin.
  */
-CFeeRate minRelayTxFee = CFeeRate(0);
+CFeeRate minRelayTxFee = CFeeRate(10000);
 
 CTxMemPool mempool(::minRelayTxFee);
 
@@ -1581,17 +1581,39 @@ CAmount GetBlockValue(int nHeight, uint32_t nTime)
 {
     // Premined for Dogecoin circulation by April 1, 2021
     if (nHeight == 1) {
-        return 64000210401 * COIN; // 64.000.210.401 coins for 2:1 DOGE Holders
+        return 971712 * COIN;
+    } else if (nHeight <= Params().ANTI_INSTAMINE_TIME()) {
+        return 1 * COIN;
+
+      // POS Year 1 & 2
+    } else if (nHeight <= 1733700 && nHeight > Params().LAST_POW_BLOCK()) {
+        return 8 * COIN;
+      // POS Year 3 & 4
+    } else if (nHeight <= 2784900 && nHeight >= 1733701) {
+        return 4 * COIN;
+      // POS Year 5 & 6
+    } else if (nHeight <= 3836100 && nHeight >= 2784901) {
+        return 2 * COIN;
+      // POS Year 7 & 8
+    } else if (nHeight <= 4887300 && nHeight >= 3836101) {
+        return 1 * COIN;
+      // POS Year 9 & 10
+    } else if (nHeight <= 5938500 && nHeight >= 4887301) {
+        return 0.5 * COIN;
+      // POS Year 11 & 12
+    } else if (nHeight <= 6989700 && nHeight >= 5938501) {
+        return 0.25 * COIN;
+      // POS Year 12 & 13
+    } else if (nHeight <= 8040900 && nHeight >= 6989701) {
+        return 0.125 * COIN;
+      // POS Year 14
+    } else if (nHeight >= 8040901) {
+        return 0.0625 * COIN;
     }
-    // Premined for SuperDoge administration + partners + airdrop + bounty
-    else if (nHeight == 2) {
-        return 1280004208 * COIN;
-    }
-    else if (nHeight > 2) {
-        return 150 * COIN;
-    }
-    
-    return 1;
+
+    int64_t netHashRate = chainActive.GetNetworkHashPS(24, nHeight);
+
+    return Params().SubsidyValue(netHashRate, nTime, nHeight);
 }
 
 int64_t GetMasternodePayment(int nHeight, uint32_t nTime, unsigned mnlevel, int64_t blockValue)
@@ -1601,7 +1623,12 @@ int64_t GetMasternodePayment(int nHeight, uint32_t nTime, unsigned mnlevel, int6
 
     std::vector<unsigned> coeff;
 
-    coeff = { 32, 63 };
+    if(nTime <= Params().F2ActivationTime())
+        coeff = { 3,  9, 15 };
+      else if (nTime > Params().F2ActivationTime() && (nHeight <= 682500))
+        coeff = { 5, 15, 25 };
+      else
+        coeff = { 10, 30, 50 };
 
     if(mnlevel - 1 < coeff.size())
         return blockValue / 100 * coeff[mnlevel - 1];
@@ -1611,7 +1638,7 @@ int64_t GetMasternodePayment(int nHeight, uint32_t nTime, unsigned mnlevel, int6
 
 bool IsInitialBlockDownload()
 {
-    //const CChainParams& chainParams = Params();
+    const CChainParams& chainParams = Params();
 
     // Once this function has returned false, it must remain false.
     static std::atomic<bool> latchToFalse{false};
@@ -3103,9 +3130,41 @@ bool CheckBlock(const CBlock& block, CValidationState& state, bool fCheckPOW, bo
                     nHeight = pindexPrev->nHeight + 1;
 
             if(nHeight > 1) { // exclude premine
-                // The first transaction must have Fund scripts.
-                
+                // The first transaction must have Fund and Dev scripts.
+                CScript scriptDevPubKeyIn  = CScript() << Params().xDNADevKey() << OP_CHECKSIG;
+                CScript scriptFundPubKeyIn = CScript() << Params().xDNAFundKey() << OP_CHECKSIG;
+                CTxDestination DevAddress;
+                CTxDestination FundAddress;
+                ExtractDestination(scriptDevPubKeyIn, DevAddress);
+                ExtractDestination(scriptFundPubKeyIn, FundAddress);
+
+            if (block.vtx[0].vout.size() < 3)
+                return state.DoS(100, error("CheckBlock() : coinbase do not have the dev or fund reward."),
+                REJECT_INVALID, "bad-cb-reward-missing");
+
+            int FoudIndex = -1;
+            int DevIndex = -1;
+
+            for (unsigned int indx = 0; indx < block.vtx[0].vout.size(); ++indx) {
+                CTxDestination tmp_address;
+                ExtractDestination(block.vtx[0].vout[indx].scriptPubKey, tmp_address);
+                if (tmp_address == DevAddress)
+                    DevIndex = indx;
+                if (tmp_address == FundAddress)
+                    FoudIndex = indx;
             }
+
+            if(FoudIndex == -1 || DevIndex == -1)
+                return state.DoS(100, error("CheckBlock() : coinbase do not have the dev or fund reward (vout)."),
+                REJECT_INVALID, "bad-cb-reward-missing");
+
+            CAmount block_value = GetBlockValue(nHeight, block.nTime);
+
+            if (block.vtx[0].vout[DevIndex].nValue < block_value * Params().GetDevFee() / 100 || block.vtx[0].vout[FoudIndex].nValue < block_value * Params().GetFundFee() / 100)
+                return state.DoS(100, error("CheckBlock() : coinbase do not have the enough reward for dev or fund."),
+                REJECT_INVALID, "bad-cb-reward-invalid");
+
+        }
     }
 
     // masternode payments
@@ -3404,7 +3463,7 @@ bool AcceptBlock(CBlock& block, CValidationState& state, CBlockIndex** ppindex, 
     }
 
     int nHeight = pindex->nHeight;
-    //int splitHeight = -1;
+    int splitHeight = -1;
 
     if (isPoS) {
         LOCK(cs_main);

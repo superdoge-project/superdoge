@@ -38,7 +38,7 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, uint32_t nTime, 
 
     if (pindexLast->nHeight > Params().LAST_POW_BLOCK()) {
         uint256 bnTargetLimit = (~uint256(0) >> 24);
-        int64_t nTargetSpacing = 1 * 60;
+        int64_t nTargetSpacing = 60;
         int64_t nTargetTimespan = 60 * 40;
 
         int64_t nActualSpacing = 0;
@@ -63,7 +63,7 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, uint32_t nTime, 
         return bnNew.GetCompact();
     }
 
-    //bool is_hexhash_work = false;
+    bool is_hexhash_work = nTime > Params().HEXHashActivationTime();
 
     for (unsigned int i = 1; BlockReading && BlockReading->nHeight > 0; i++) {
         if (PastBlocksMax > 0 && i > PastBlocksMax) {
@@ -76,11 +76,12 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, uint32_t nTime, 
             uint256 block_target;
             block_target.SetCompact(BlockReading->nBits);
 
-            //bool keccak2xhash =  false;//is_hexhash_work && BlockReading->GetBlockTime() <= Params().HEXHashActivationTime();
+            bool keccak2xhash =  is_hexhash_work
+                              && BlockReading->GetBlockTime() <= Params().HEXHashActivationTime();
 
             // adjust difficulty of keccak (1350 MHps) blocks for hexhash (13.5 MHps)
-            //if(keccak2xhash)
-            block_target *= 100;  // 100 = 1350 MHps / 13.5 MHps
+            if(keccak2xhash)
+                block_target *= 100;  // 100 = 1350 MHps / 13.5 MHps
 
             if (CountBlocks == 1) {
                 PastDifficultyAverage = block_target;

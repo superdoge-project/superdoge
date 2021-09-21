@@ -17,6 +17,5 @@ private:
     static QString defaultStyleFile();
     QString m_filename;
     QKeySequence m_key;
-
 };
 #endif

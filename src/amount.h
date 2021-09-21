@@ -5,7 +5,6 @@
 
 #ifndef BITCOIN_AMOUNT_H
 #define BITCOIN_AMOUNT_H
-
 #include "serialize.h"
 
 #include <stdlib.h>

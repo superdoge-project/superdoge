@@ -5,7 +5,6 @@
 //
 // Wraps dumb protocol buffer paymentRequest
 // with some extra methods
-//
 
 #include "paymentrequestplus.h"
 
